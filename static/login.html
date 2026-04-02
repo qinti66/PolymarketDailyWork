@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登录 · Polymarket 活跃指南</title>
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .card { background: #fff; padding: 2rem 2.25rem; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,.08); width: 100%; max-width: 360px; }
+        h1 { font-size: 1.25rem; margin: 0 0 1rem; color: #212529; }
+        label { display: block; font-size: 0.875rem; color: #495057; margin-bottom: 0.35rem; }
+        input { width: 100%; box-sizing: border-box; padding: 0.65rem 0.75rem; border: 1px solid #ced4da; border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
+        button { width: 100%; padding: 0.75rem; font-size: 1rem; font-weight: 600; color: #fff; background: #0d6efd; border: none; border-radius: 8px; cursor: pointer; }
+        button:hover { background: #0b5ed7; }
+        .err { color: #842029; background: #f8d7da; padding: 0.65rem 0.75rem; border-radius: 8px; font-size: 0.875rem; margin-bottom: 1rem; display: none; }
+        .hint { font-size: 0.8rem; color: #6c757d; margin-top: 1rem; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Polymarket 活跃指南</h1>
+        <div id="err" class="err">账号或密码错误，请重试。</div>
+        <form method="post" action="/login" autocomplete="on">
+            <label for="username">账号</label>
+            <input id="username" name="username" type="text" required autocomplete="username">
+            <label for="password">密码</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password">
+            <button type="submit">登录</button>
+        </form>
+        <p class="hint">使用表单登录后，各设备浏览器会携带会话 Cookie，<code>fetch</code> 可正常调用接口。命令行仍可用 <code>curl -u</code>。</p>
+    </div>
+    <script>
+        if (new URLSearchParams(location.search).get('err') === '1') {
+            document.getElementById('err').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

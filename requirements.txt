@@ -1,0 +1,7 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.2
+# SessionMiddleware 依赖；部分环境未作为子依赖装上，显式声明避免 ModuleNotFoundError
+itsdangerous>=2.1.2
+# FastAPI 接收 Form()（如 /login 表单）需要
+python-multipart>=0.0.6
