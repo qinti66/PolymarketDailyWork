@@ -2,43 +2,63 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Polymarket-活跃指南</title>
+    <title>Polymarket 月度活跃调度</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 40px; background-color: #f8f9fa; color: #343a40; }
-        h1, h2 { border-bottom: 2px solid #dee2e6; padding-bottom: 10px; }
-        .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn { padding: 10px 20px; font-size: 16px; font-weight: bold; color: white; border: none; cursor: pointer; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-primary { background: #0d6efd; }
-        .btn-success { background: #198754; padding: 8px 16px; font-size: 14px; }
-        .btn-danger { background: #dc3545; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; }
-        th, td { padding: 15px; border-bottom: 1px solid #dee2e6; text-align: left; }
-        th { background-color: #e9ecef; font-weight: 600; }
-        tr:hover { background-color: #f8f9fa; }
-        .status-badge { padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .badge-active { background: #cfe2ff; color: #084298; }
-        .badge-done { background: #d1e7dd; color: #0f5132; }
-        .summary { background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 5px solid #ffc107; margin-bottom: 20px; }
-        .scrollable-table { max-height: 500px; overflow-y: auto; display: block; }
-        .scrollable-table table { width: 100%; display: table; }
+        :root { color-scheme: light; --ink: #172033; --muted: #68738a; --line: #e8ecf3; --brand: #635bff; --brand-dark: #4d46db; }
+        * { box-sizing: border-box; }
+        body { font-family: Inter, 'Segoe UI', system-ui, sans-serif; margin: 0; background: #f5f7fb; color: var(--ink); }
+        body::before { content: ''; position: fixed; inset: 0 0 auto; height: 300px; z-index: -1; background: radial-gradient(circle at 18% 12%, #8b85ff 0, transparent 26%), linear-gradient(135deg, #171a38, #2c2860); }
+        .page { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 42px 0 64px; }
+        h1 { color: white; margin: 0; font-size: clamp(24px, 4vw, 34px); letter-spacing: -.03em; }
+        h2 { margin: 0 0 16px; font-size: 18px; }
+        .header-panel { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .header-panel p { color: #c7c9ec; margin: 7px 0 0; }
+        .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+        .btn { padding: 10px 16px; font-size: 14px; font-weight: 700; color: white; border: 0; cursor: pointer; border-radius: 10px; text-decoration: none; transition: .2s ease; }
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+        .btn-primary { background: var(--brand); box-shadow: 0 8px 22px rgba(99,91,255,.3); }
+        .btn-success { background: #12a474; padding: 8px 13px; font-size: 13px; }
+        .btn-danger { background: rgba(255,255,255,.14); }
+        .btn-muted { background: rgba(255,255,255,.14); }
+        .summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 22px; }
+        .metric { background: white; padding: 20px; border: 1px solid rgba(255,255,255,.7); border-radius: 16px; box-shadow: 0 10px 30px rgba(25,33,61,.08); }
+        .metric span { display: block; color: var(--muted); font-size: 13px; margin-bottom: 8px; }
+        .metric strong { font-size: 25px; letter-spacing: -.03em; }
+        .panel { background: white; padding: 22px; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 12px 32px rgba(25,33,61,.06); margin-bottom: 20px; }
+        .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .rule { color: var(--muted); font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid var(--line); text-align: left; }
+        th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; font-weight: 700; }
+        tr:last-child td { border-bottom: 0; }
+        tr:hover { background-color: #fafbfe; }
+        .status-badge { display: inline-flex; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+        .badge-active { background: #fff2d8; color: #9a6200; }
+        .badge-covered { background: #e7edff; color: #4358bc; }
+        .badge-done { background: #dff8ed; color: #087653; }
+        .scrollable-table { max-height: 520px; overflow: auto; }
+        .empty { text-align: center; color: var(--muted); padding: 34px !important; }
+        @media (max-width: 780px) { .page { width: min(100% - 24px, 1180px); padding-top: 24px; } .header-panel { align-items: flex-start; flex-direction: column; } .actions { justify-content: flex-start; } .summary { grid-template-columns: repeat(2, 1fr); } .panel { overflow-x: auto; } }
+        @media (max-width: 480px) { .summary { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+<div class="page">
     <div class="header-panel">
-        <h1>🛡️ Polymarket-活跃指南</h1>
-        <div>
-            <button class="btn btn-primary" onclick="generateTasks()">🎲 生成防交叉指令</button>
-            <button class="btn btn-danger" onclick="resetDB()">⚠️ 抹除重置并重新读取</button>
-            <a class="btn" href="/logout" style="background:#6c757d;text-decoration:none;display:inline-block;line-height:normal;">退出登录</a>
+        <div><h1>月度活跃调度</h1><p>按剩余天数均匀分配 · 每天一批 · 历史配对永久避让</p></div>
+        <div class="actions">
+            <button class="btn btn-primary" onclick="generateTasks()">生成今日指令</button>
+            <button class="btn btn-danger" onclick="resetDB()">重置本月进度</button>
+            <a class="btn btn-muted" href="/logout">退出</a>
         </div>
     </div>
     
     <div class="summary" id="summary-box">
-        <strong>运行状态：</strong> 正在从服务器拉取核心数据...
+        <div class="metric"><span>状态</span><strong>载入中</strong></div>
     </div>
     
-    <h2>🕒 待办交互指令</h2>
+    <div class="panel">
+    <div class="panel-head"><h2>待办交互指令</h2><span class="rule" id="daily-rule">正在计算今日建议量</span></div>
     <table>
         <thead>
             <tr><th>任务ID</th><th>生成日期</th><th>指令类型</th><th>发起方 (Source)</th><th>接收方 (Targets)</th><th>操作</th></tr>
@@ -47,18 +67,22 @@
             <tr><td colspan="6" style="text-align:center;">安全握手中，请稍候...</td></tr>
         </tbody>
     </table>
+    </div>
 
-    <h2 style="margin-top: 40px;">📊 资产池运行状态表</h2>
+    <div class="panel">
+    <div class="panel-head"><h2>账号月度进度</h2><span class="rule">优先调度本月尚未覆盖的账号</span></div>
     <div class="scrollable-table">
         <table>
             <thead>
-                <tr><th>钱包标识</th><th>本月目标</th><th>本月已完成</th><th>本周上限</th><th>本周已完成</th><th>运行状态</th></tr>
+                <tr><th>钱包标识</th><th>本月目标</th><th>本月已完成</th><th>剩余次数</th><th>运行状态</th></tr>
             </thead>
             <tbody id="stats-body">
-                <tr><td colspan="6" style="text-align:center;">安全握手中，请稍候...</td></tr>
+                <tr><td colspan="5" class="empty">正在读取账号进度...</td></tr>
             </tbody>
         </table>
     </div>
+    </div>
+</div>
 
     <script>
         const fetchOpts = { credentials: 'same-origin' };
@@ -74,13 +98,23 @@
                 const data = await res.json();
                 
                 // 渲染统计看板
+                const coverage = data.total_accs ? Math.round(data.covered_accs / data.total_accs * 100) : 0;
                 document.getElementById('summary-box').innerHTML = 
-                    `<strong>运行状态：</strong> 资产池 <b>${data.total_accs}</b> 个账号 | 本月已达标休眠 <b>${data.completed_accs}</b> 个 | <b>ISO 周 ${data.iso_week || ''}</b> | 规则：每账号月目标 <b>${data.month_min}～${data.month_max}</b> 次（随机分配）、自然周 <b>${data.week_min}～${data.week_max}</b> 次（系统按周上限 <b>${data.week_max}</b> 卡池；「至少 1」请自行排期）；调度仍偏向 1 对 1。`;
+                    `<div class="metric"><span>当前月份</span><strong>${data.current_month}</strong></div>
+                     <div class="metric"><span>至少完成 1 次</span><strong>${data.covered_accs} <small>/ ${coverage}%</small></strong></div>
+                     <div class="metric"><span>剩余参与次数</span><strong>${data.remaining_count}</strong></div>
+                     <div class="metric"><span>本月剩余天数</span><strong>${data.remaining_days}</strong></div>
+                     <div class="metric"><span>今日建议任务</span><strong>${data.suggested_tasks}</strong></div>`;
+                document.getElementById('daily-rule').textContent = data.generated_today
+                    ? `今日已生成 ${data.generated_today} 个任务，下一批请明天生成`
+                    : `今日建议覆盖约 ${data.daily_target} 个账号，生成 ${data.suggested_tasks} 个 1对1 任务`;
                 
                 // 渲染待办任务
                 const tasksBody = document.getElementById('tasks-body');
                 if (data.pending_tasks.length === 0) {
-                    tasksBody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:#6c757d; padding:30px;'>当前防女巫指令队列为空，请点击右上角按钮由算法随机构建。</td></tr>";
+                    tasksBody.innerHTML = data.generated_today
+                        ? "<tr><td colspan='6' class='empty'>今日任务已经全部完成，请明天再生成下一批。</td></tr>"
+                        : "<tr><td colspan='6' class='empty'>今天还没有待办指令，点击右上角按钮生成今日建议量。</td></tr>";
                 } else {
                     tasksBody.innerHTML = data.pending_tasks.map(t => `
                         <tr>
@@ -97,21 +131,16 @@
                 // 渲染所有账号进度
                 const statsBody = document.getElementById('stats-body');
                 statsBody.innerHTML = data.stats.map(s => {
-                    const cap = s.week_cap != null ? s.week_cap : (data.week_max || 2);
                     const monthDone = s.month_current >= s.month_target;
-                    const weekFull = s.week_current >= cap;
-                    const badgeClass = monthDone ? 'badge-done' : 'badge-active';
-                    let badgeText = monthDone ? '✅ 本月达标休眠' : '⏳ 本月列队中';
-                    if (!monthDone && weekFull) badgeText = `⏳ 本周已满（${s.week_current}/${cap}）· 下自然周再继续`;
-                    if (!monthDone && !weekFull && s.week_current === 0) badgeText = '⏳ 本周建议完成 1～' + cap + ' 次';
-                    if (!monthDone && !weekFull && s.week_current === 1 && cap >= 2) badgeText = '⏳ 本周还可至多 1 次';
+                    const covered = s.month_current >= data.month_min;
+                    const badgeClass = monthDone ? 'badge-done' : (covered ? 'badge-covered' : 'badge-active');
+                    const badgeText = monthDone ? '本月目标已完成' : (covered ? '最低要求已完成' : '等待本月首次互动');
                     return `
                         <tr>
                             <td><b>${s.acc_id}</b></td>
                             <td>${s.month_target} 次</td>
                             <td>${s.month_current} 次</td>
-                            <td>${cap} 次</td>
-                            <td>${s.week_current} 次</td>
+                            <td>${Math.max(0, s.month_target - s.month_current)} 次</td>
                             <td><span class='status-badge ${badgeClass}'>${badgeText}</span></td>
                         </tr>
                     `;
@@ -131,14 +160,15 @@
         }
         
         async function completeTask(taskId) {
-            if(confirm('🚨 资产安全确认：请确保您已在真实环境完成了该交互！\n点击确认后，该行为图谱将永久写入防交叉防火墙。')) {
-                await fetch('/api/complete/' + taskId, { method: 'POST', ...fetchOpts });
+            if(confirm('请确认已经完成该互动。确认后将计入本月进度，并永久记录这组配对。')) {
+                const res = await fetch('/api/complete/' + taskId, { method: 'POST', ...fetchOpts });
+                if (!res.ok) alert((await res.json()).detail || '确认失败');
                 location.reload();
             }
         }
         
         async function resetDB() {
-            if(confirm('⚠️ 危险操作：这将清空历史防交叉图谱，并重新分配当月配额。\n仅在测试或新月轮换时使用。确定执行吗？')) {
+            if(confirm('这会清空本月完成进度并重新分配 1～2 次目标，但会保留历史配对记录。确定继续吗？')) {
                 const res = await fetch('/api/reset', { method: 'POST', ...fetchOpts });
                 const data = await res.json();
                 alert(data.message);
