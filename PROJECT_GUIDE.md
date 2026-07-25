@@ -317,6 +317,44 @@ curl -u 'boss:你的密码' -X POST http://127.0.0.1:8000/api/generate
 curl -u 'boss:你的密码' -X POST http://127.0.0.1:8000/api/complete/1
 ```
 
+## 12.1 后台运行（nohup，最简单）
+
+如果不需要开机自启，只想关闭 SSH 后服务继续运行，用 `nohup` 即可。
+
+在项目目录执行：
+
+```bash
+source .venv/bin/activate
+export SESSION_SECRET='你之前保存的固定密钥'
+nohup python -m uvicorn main:app --host 0.0.0.0 --port 8000 > app.log 2>&1 &
+```
+
+回车后再按一次回车回到命令行，然后就可以关闭 SSH。
+
+查看是否运行：
+
+```bash
+ss -tlnp | grep 8000
+```
+
+查看日志：
+
+```bash
+tail -f app.log
+```
+
+停止服务：
+
+```bash
+pkill -f "uvicorn main:app"
+```
+
+说明：
+
+- 使用 `python -m uvicorn`，避免 `uvicorn: command not found`。
+- `SESSION_SECRET` 使用固定值，不要每次重新生成。
+- 服务器重启后不会自动恢复，需要重新执行一次启动命令；需要自动恢复请使用下一节的 systemd。
+
 ## 13. Linux systemd 后台部署
 
 以下示例假设：
